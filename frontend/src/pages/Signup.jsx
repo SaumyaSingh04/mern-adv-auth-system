@@ -79,9 +79,8 @@ const Signup = () => {
           onChange={handleChange}
           required
         />
-        <button
-          type='submit'
-          className='bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80'
+       <button
+          className="bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80"
           disabled={loading}
         >
           {loading ? 'Signing Up...' : 'Sign Up'}
