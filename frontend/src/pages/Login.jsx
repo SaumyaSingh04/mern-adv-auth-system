@@ -27,7 +27,7 @@ const Login = () => {
     try {
       dispatch(signInStart());
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,11 +38,11 @@ const Login = () => {
       const data = await res.json();
 
       if (res.ok) {
-        dispatch(signInSuccess(data)); // Pass the user data to signInSuccess
+        dispatch(signInSuccess(data));
         setLoginStatus("success");
         navigate("/");
       } else {
-        dispatch(signInFailure("Invalid credentials")); // Pass an error message
+        dispatch(signInFailure("Invalid credentials"));
         setLoginStatus("invalidCredentials");
       }
     } catch (error) {
@@ -73,7 +73,7 @@ const Login = () => {
           onChange={handleChange}
         />
         <button
-          className={`bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80`}
+          className="bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80"
           disabled={loading}
         >
           {loading ? 'Logging In...' : 'LOGIN'}
@@ -90,7 +90,7 @@ const Login = () => {
         <p className='text-red-500'>Login failed. Please try again later.</p>
       )}
       <div className='flex gap-4 m-4'>
-        <p>Don't have an account? </p>
+        <p>Don't have an account?</p>
         <Link to='/signup'>
           <span className='text-blue-500'>Signup</span>
         </Link>
