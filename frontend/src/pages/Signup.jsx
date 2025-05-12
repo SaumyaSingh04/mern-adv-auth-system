@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 
 const Signup = () => {
-  const [formdata, setFormdata] = useState({});
+  const [formdata, setFormdata] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
   const [loading, setLoading] = useState(false);
   const [signupStatus, setSignupStatus] = useState(null);
 
@@ -16,7 +20,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,18 +31,17 @@ const Signup = () => {
       const data = await res.json();
 
       if (res.ok) {
-        // Successful signup
         setSignupStatus('success');
+        setFormdata({ username: '', email: '', password: '' }); // Clear form
       } else {
-        // Unsuccessful signup
         if (data.error === 'Email already registered') {
           setSignupStatus('emailExists');
         } else {
-          setSignupStatus('failed');
+          setSignupStatus(data.error || 'failed');
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setSignupStatus('failed');
     } finally {
       setLoading(false);
@@ -53,44 +56,56 @@ const Signup = () => {
           type='text'
           placeholder='Username'
           id='username'
+          value={formdata.username}
           className='bg-slate-300 p-3 rounded-lg'
           onChange={handleChange}
+          required
         />
         <input
           type='email'
           placeholder='Email'
           id='email'
+          value={formdata.email}
           className='bg-slate-300 p-3 rounded-lg'
           onChange={handleChange}
+          required
         />
         <input
           type='password'
           placeholder='Password'
           id='password'
+          value={formdata.password}
           className='bg-slate-300 p-3 rounded-lg'
           onChange={handleChange}
+          required
         />
         <button
-          className={`bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80`}
+          type='submit'
+          className='bg-slate-800 text-white rounded-md p-2 uppercase hover:opacity-95 disabled:opacity-80'
           disabled={loading}
         >
           {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
         <OAuth />
       </form>
+
       {signupStatus === 'success' && (
-        <p className='text-green-500'>User added successfully!</p>
+        <p className='text-green-500 mt-4'>User registered successfully!</p>
       )}
       {signupStatus === 'emailExists' && (
-        <p className='text-red-500'>Email already exists. Please use a different email.</p>
+        <p className='text-red-500 mt-4'>Email already exists. Please use a different email.</p>
       )}
       {signupStatus === 'failed' && (
-        <p className='text-red-500'>Signup failed. Please try again later.</p>
+        <p className='text-red-500 mt-4'>Signup failed. Please try again later.</p>
       )}
-      <div className='flex gap-4 m-4'>
-        <p>Have an account? </p>
+      {signupStatus && !['success', 'emailExists', 'failed'].includes(signupStatus) && (
+        <p className='text-red-500 mt-4'>{signupStatus}</p>
+      )}
+
+      <div className='flex gap-2 mt-4'>
+        <p>Already have an account?</p>
         <Link to='/login'>
-          <span className='text-blue-500'>Login</span>
+          <span className='text-blue-500 hover:underline'>Login</span>
         </Link>
       </div>
     </div>
