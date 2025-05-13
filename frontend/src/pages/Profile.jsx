@@ -69,6 +69,7 @@ export default function Profile() {
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+         credentials: 'include',
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -89,6 +90,7 @@ export default function Profile() {
     try {
       dispatch(deleteUserStart());
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/delete/${currentUser._id}`, {
+        credentials: 'include',
         method: 'DELETE',
       });
       const data = await res.json();
@@ -104,7 +106,9 @@ export default function Profile() {
 
   const handleSignout = async () => {
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signout`);
+     await fetch(`${import.meta.env.VITE_API_URL}/api/auth/signout`, {
+  credentials: 'include',
+});
       dispatch(signOut());
     } catch (err) {
       console.log(err);
