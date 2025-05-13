@@ -20,7 +20,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://mern-adv-auth-system.vercel.app',
+  origin: 'https://mern-adv-auth-system-33cw.vercel.app',
   credentials: true
 }));
 
